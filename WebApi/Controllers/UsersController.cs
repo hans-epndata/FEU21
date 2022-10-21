@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Models;
 using WebApi.Services;
 
 namespace WebApi.Controllers
@@ -13,6 +14,16 @@ namespace WebApi.Controllers
         public UsersController(UserManager userManager)
         {
             _userManager = userManager;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(UserRequest req)
+        {
+            var userProfile = await _userManager.CreateUserAsync(req);
+            if (userProfile != null)
+                return new OkObjectResult(userProfile);
+
+            return new BadRequestResult();
         }
     }
 }
